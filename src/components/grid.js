@@ -9,7 +9,9 @@ export default class gridContainer extends Component {
         this.props.amountOfSquares,
         this.props.amountOfWalls
       ),
+      drawWalls: false,
       selectedSquares: [],
+      newWall: [],
     };
   }
 
@@ -20,6 +22,16 @@ export default class gridContainer extends Component {
     if (this.props.amountOfWalls !== prevProps.amountOfWalls) this.newGraph();
     if (this.props.clearWalls !== prevProps.clearWalls) this.clearGraph("wall");
     if (this.props.clearPaths !== prevProps.clearPaths) this.clearGraph("path");
+    if (this.props.drawWalls !== prevProps.drawWalls) this.draw();
+  }
+
+  draw() {
+    this.setState(
+      {
+        drawWalls: !this.state.drawWalls,
+      },
+      () => console.log("draw walls " + this.state.drawWalls)
+    );
   }
 
   newGraph() {
@@ -81,6 +93,31 @@ export default class gridContainer extends Component {
     return true;
   }
 
+  addToWall(array) {
+    let newArray = [];
+    this.state.graph.forEach((square) => {
+      if (array.includes(square)) square.wall = true;
+      newArray.push(square);
+    });
+
+    this.setState({
+      graph: newArray,
+    });
+  }
+
+  addToWallArray(value, mouse) {
+    if (mouse) {
+      this.setState({
+        newWall: [...this.state.newWall, value],
+      });
+    } else {
+      this.addToWall(this.state.newWall);
+      this.setState({
+        newWall: [],
+      });
+    }
+  }
+
   render() {
     let squares = [];
     let sides = Math.sqrt((800 * 800) / this.state.graph.length);
@@ -96,6 +133,8 @@ export default class gridContainer extends Component {
           style={style}
           sides={sides}
           key={i}
+          draw={this.state.drawWalls}
+          addToWall={this.addToWallArray.bind(this)}
         />
       );
     }
@@ -105,6 +144,14 @@ export default class gridContainer extends Component {
 
 /////////////////////////////////////////////////
 
+let mouseDown = false;
+window.addEventListener("mousedown", () => {
+  mouseDown = true;
+});
+window.addEventListener("mouseup", () => {
+  mouseDown = false;
+});
+
 export class Square extends Component {
   constructor(props) {
     super(props);
@@ -112,15 +159,24 @@ export class Square extends Component {
       selected: false,
     };
     this.selectSquare = this.selectSquare.bind(this);
+    this.addToWall = this.addToWall.bind(this);
   }
 
   selectSquare(e) {
-    if (e.target.id !== "selected") {
+    if (e.target.id !== "selected" && !this.props.draw) {
       this.props.node.path = true;
       this.props.increase(this.props.node);
       this.setState({
         selected: true,
       });
+    }
+  }
+  //mouse over and mouse down
+  addToWall(e) {
+    if (mouseDown && this.props.draw) {
+      this.props.addToWall(this.props.node, mouseDown);
+    } else if (this.props.draw) {
+      this.props.addToWall(this.props.node, mouseDown);
     }
   }
 
@@ -140,8 +196,9 @@ export class Square extends Component {
           <div
             className="square"
             id="free"
-            style={this.props.style}
+            onMouseOver={this.addToWall}
             onClick={this.selectSquare}
+            style={this.props.style}
           ></div>
         )}
       </div>

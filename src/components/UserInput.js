@@ -22,6 +22,10 @@ export class UserInput extends Component {
     this.props.amountOfWalls(e.target.value);
   }
 
+  drawWalls() {
+    this.props.drawWalls();
+  }
+
   render() {
     return (
       <div id="user-input-container">
@@ -39,18 +43,54 @@ export class UserInput extends Component {
         />
         <ButtonInput name={"Clear Walls"} event={this.clearWalls.bind(this)} />
         <ButtonInput name={"Clear Paths"} event={this.clearPaths.bind(this)} />
+        <ButtonInput name={"Draw Walls"} event={this.drawWalls.bind(this)} />
       </div>
     );
   }
 }
 
 export class ButtonInput extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      active: false,
+    };
+    this.toggleDraw = this.toggleDraw.bind(this);
+  }
+
+  toggleDraw() {
+    this.props.event();
+    this.setState({
+      active: !this.state.active,
+    });
+  }
+
   render() {
-    return (
-      <button onClick={this.props.event} id="input-button">
-        {this.props.name}
-      </button>
-    );
+    if (this.props.name !== "Draw Walls") {
+      return (
+        <button onClick={this.props.event} id="input-button">
+          {this.props.name}
+        </button>
+      );
+    } else {
+      return (
+        <div id="selectable-div">
+          {this.state.active ? (
+            <button
+              onClick={this.toggleDraw}
+              id="selectable-button"
+              className="button-selected"
+            >
+              {this.props.name}
+            </button>
+          ) : (
+            <button onClick={this.toggleDraw} id="selectable-button">
+              {this.props.name}
+            </button>
+          )}
+        </div>
+      );
+    }
   }
 }
 

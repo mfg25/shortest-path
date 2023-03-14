@@ -10,6 +10,7 @@ export default class App extends Component {
       amountOfWalls: 30,
       clearWalls: false,
       clearPaths: false,
+      drawWalls: false,
     };
     this.changeGrid = this.changeGrid.bind(this);
   }
@@ -44,6 +45,12 @@ export default class App extends Component {
     });
   }
 
+  drawWalls(value) {
+    this.setState({
+      drawWalls: !this.state.drawWalls,
+    });
+  }
+
   render() {
     return (
       <div className="App">
@@ -52,12 +59,14 @@ export default class App extends Component {
           amountOfWalls={this.amountOfWalls.bind(this)}
           clearWalls={this.clearWalls.bind(this)}
           clearPaths={this.clearPaths.bind(this)}
+          drawWalls={this.drawWalls.bind(this)}
         />
         <GridContainer
           amountOfSquares={this.state.amountOfSquares}
           clearWalls={this.state.clearWalls}
           clearPaths={this.state.clearPaths}
           amountOfWalls={this.state.amountOfWalls}
+          drawWalls={this.state.drawWalls}
         />
       </div>
     );
