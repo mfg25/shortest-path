@@ -1,8 +1,8 @@
 export class Node {
-  constructor(value) {
+  constructor(value, wallChance) {
     this.value = value;
     this.edgesList = [];
-    this.wall = this.getRandom();
+    this.wall = this.getRandom(wallChance);
     this.path = false;
   }
 
@@ -10,9 +10,9 @@ export class Node {
     this.edgesList.push(node);
   }
 
-  getRandom() {
+  getRandom(wallChance) {
     let number = Math.floor(Math.random() * 100);
-    return number < 40;
+    return number < wallChance;
   }
 
   getAdjacentNodes() {
@@ -70,12 +70,12 @@ export class Graph {
   }
 }
 
-export function generateGraph(amountOfSquares) {
+export function generateGraph(amountOfSquares, amountOfWalls) {
   let squares = [];
 
   for (let x = 0; x < amountOfSquares; x++) {
     for (let y = 0; y < amountOfSquares; y++) {
-      let square = new Node([x, y]);
+      let square = new Node([x, y], amountOfWalls);
       squares.push(square);
     }
   }
@@ -86,12 +86,12 @@ export function generateGraph(amountOfSquares) {
   for (let square of squares) {
     for (dx of [-1, 0, 1]) {
       for (dy of [-1, 0, 1]) {
-        if (!(dy === 0 && dx === 0)) {
+        if (Math.abs(dx) !== Math.abs(dy)) {
           let x = square.value[0] + dx;
           let y = square.value[1] + dy;
           if (x >= 0 && x < amountOfSquares && y >= 0 && y < amountOfSquares) {
             for (let move of squares) {
-              if (move.value[0] === x && move.value[1] === y && !move.wall)
+              if (move.value[0] === x && move.value[1] === y)
                 square.connect(move);
             }
           }

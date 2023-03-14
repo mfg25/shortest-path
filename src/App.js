@@ -1,11 +1,65 @@
 import GridContainer from "./components/grid.js";
 import "./App.css";
-function App() {
-  return (
-    <div className="App">
-      <GridContainer amountOfSquares={50} />
-    </div>
-  );
-}
+import UserInput from "./components/UserInput.js";
+import { Component } from "react";
+export default class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      amountOfSquares: 50,
+      amountOfWalls: 30,
+      clearWalls: false,
+      clearPaths: false,
+    };
+    this.changeGrid = this.changeGrid.bind(this);
+  }
 
-export default App;
+  changeGrid(value) {
+    this.setState({
+      amountOfSquares: value,
+    });
+  }
+
+  clearWalls() {
+    this.setState(
+      {
+        clearWalls: !this.state.clearWalls,
+      },
+      () => console.log(this.state.clearWalls)
+    );
+  }
+
+  clearPaths() {
+    this.setState(
+      {
+        clearPaths: !this.state.clearPaths,
+      },
+      () => console.log(this.state.clearPaths)
+    );
+  }
+
+  amountOfWalls(value) {
+    this.setState({
+      amountOfWalls: value,
+    });
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <UserInput
+          change={this.changeGrid.bind(this)}
+          amountOfWalls={this.amountOfWalls.bind(this)}
+          clearWalls={this.clearWalls.bind(this)}
+          clearPaths={this.clearPaths.bind(this)}
+        />
+        <GridContainer
+          amountOfSquares={this.state.amountOfSquares}
+          clearWalls={this.state.clearWalls}
+          clearPaths={this.state.clearPaths}
+          amountOfWalls={this.state.amountOfWalls}
+        />
+      </div>
+    );
+  }
+}

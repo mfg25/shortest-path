@@ -4,11 +4,43 @@ import { generateGraph, findPath } from "../graph/graph";
 export default class gridContainer extends Component {
   constructor(props) {
     super(props);
-    this.squareElement = React.createRef();
     this.state = {
-      graph: generateGraph(this.props.amountOfSquares),
+      graph: generateGraph(
+        this.props.amountOfSquares,
+        this.props.amountOfWalls
+      ),
       selectedSquares: [],
     };
+  }
+
+  componentDidUpdate(prevProps) {
+    //Typical usage, don't forget to compare the props
+    if (this.props.amountOfSquares !== prevProps.amountOfSquares)
+      this.newGraph();
+    if (this.props.amountOfWalls !== prevProps.amountOfWalls) this.newGraph();
+    if (this.props.clearWalls !== prevProps.clearWalls) this.clearGraph("wall");
+    if (this.props.clearPaths !== prevProps.clearPaths) this.clearGraph("path");
+  }
+
+  newGraph() {
+    this.setState({
+      graph: generateGraph(
+        this.props.amountOfSquares,
+        this.props.amountOfWalls
+      ),
+      selectedSquares: [],
+    });
+  }
+
+  clearGraph(type) {
+    let newGraph = [];
+    this.state.graph.forEach((node) => {
+      node[type] = false;
+      newGraph.push(node);
+    });
+    this.setState({
+      graph: newGraph,
+    });
   }
 
   increaseSelectedSquares(square) {
@@ -51,7 +83,7 @@ export default class gridContainer extends Component {
 
   render() {
     let squares = [];
-    let sides = Math.sqrt((700 * 700) / this.state.graph.length);
+    let sides = Math.sqrt((800 * 800) / this.state.graph.length);
     let style = {
       width: sides,
       height: sides,
@@ -59,7 +91,6 @@ export default class gridContainer extends Component {
     for (let i = 0; i < this.state.graph.length; i++) {
       squares.push(
         <Square
-          ref={this.squareElement}
           node={this.state.graph[i]}
           increase={this.increaseSelectedSquares.bind(this)}
           style={style}
@@ -72,6 +103,8 @@ export default class gridContainer extends Component {
   }
 }
 
+/////////////////////////////////////////////////
+
 export class Square extends Component {
   constructor(props) {
     super(props);
@@ -83,6 +116,7 @@ export class Square extends Component {
 
   selectSquare(e) {
     if (e.target.id !== "selected") {
+      this.props.node.path = true;
       this.props.increase(this.props.node);
       this.setState({
         selected: true,
@@ -95,7 +129,7 @@ export class Square extends Component {
       <div>
         {this.props.node.wall ? (
           <div className="square" id={"wall"} style={this.props.style}></div>
-        ) : this.state.selected || this.props.node.path ? (
+        ) : this.props.node.path ? (
           <div
             className="square"
             id="selected"

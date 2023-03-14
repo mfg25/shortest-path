@@ -1,6 +1,6 @@
 #grid-container{
-    width: 700px;
-    height: 700px;
+    width: 800px;
+    height: 800px;
     background-color: aliceblue;
     display: flex;
     flex-wrap: wrap;
