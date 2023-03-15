@@ -2,4 +2,4 @@
 
 demonstração do algoritmo para encontrar o menor caminho entre dois nós em um grafo utilizando react.
 
-![ezgif com-gif-maker](https://user-images.githubusercontent.com/98189814/224611307-f8ae254f-921c-458f-aebe-306aee3732e3.gif)
+![ezgif com-video-to-gif](https://user-images.githubusercontent.com/98189814/225426695-bc77bb50-cf1b-4b53-b936-943aa8693960.gif)
