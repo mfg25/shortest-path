@@ -119,7 +119,7 @@ export default class gridContainer extends Component {
 
   getSquareSize() {
     let sides;
-    if (window.innerWidth < 800) {
+    if (window.innerWidth < 900) {
       sides = Math.sqrt((350 * 350) / this.state.graph.length);
     } else {
       sides = Math.sqrt((800 * 800) / this.state.graph.length);

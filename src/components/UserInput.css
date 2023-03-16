@@ -60,17 +60,16 @@
     background-color: rgb(212, 212, 202) !important;
 }
 
-@media (max-width: 600px)
+@media (max-width: 900px) or (max-height: 600px)
 {
     
     #user-input-container{
-        height: 400px;
-        width: 400px;
+        height: 300px;
+        width: 300px;
         margin: 5px;
     }
     #input-and-label{
-        
-        width: 45%;
+        width: 60%;
         height: 10%;
         padding: 5px 10px 5px 10px;
         font-size:  13px;
