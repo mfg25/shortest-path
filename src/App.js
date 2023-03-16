@@ -11,6 +11,7 @@ export default class App extends Component {
       clearWalls: false,
       clearPaths: false,
       drawWalls: false,
+      currentWindowSize: 0,
     };
     this.changeGrid = this.changeGrid.bind(this);
   }

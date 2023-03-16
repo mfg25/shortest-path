@@ -16,7 +16,6 @@ export default class gridContainer extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    //Typical usage, don't forget to compare the props
     if (this.props.amountOfSquares !== prevProps.amountOfSquares)
       this.newGraph();
     if (this.props.amountOfWalls !== prevProps.amountOfWalls) this.newGraph();
@@ -118,20 +117,26 @@ export default class gridContainer extends Component {
     }
   }
 
+  getSquareSize() {
+    let sides;
+    if (window.innerWidth < 800) {
+      sides = Math.sqrt((350 * 350) / this.state.graph.length);
+    } else {
+      sides = Math.sqrt((800 * 800) / this.state.graph.length);
+    }
+    return { width: sides, height: sides };
+  }
+
   render() {
     let squares = [];
-    let sides = Math.sqrt((800 * 800) / this.state.graph.length);
-    let style = {
-      width: sides,
-      height: sides,
-    };
+    let style = this.getSquareSize();
+
     for (let i = 0; i < this.state.graph.length; i++) {
       squares.push(
         <Square
           node={this.state.graph[i]}
           increase={this.increaseSelectedSquares.bind(this)}
           style={style}
-          sides={sides}
           key={i}
           draw={this.state.drawWalls}
           addToWall={this.addToWallArray.bind(this)}
