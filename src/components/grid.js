@@ -82,7 +82,6 @@ export default class gridContainer extends Component {
     while (copyMoves[0]) {
       setTimeout(() => {
         copyMoves[0].setAttribute("id", "selected");
-        
       }, 1000);
       copyMoves.shift();
     }
