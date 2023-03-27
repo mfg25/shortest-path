@@ -4,9 +4,10 @@
     background-color: aliceblue;
     display: flex;
     flex-wrap: wrap;
+    border: 5px solid black;
 }
 .square{
-    border: 0.1px solid black;
+   
     box-sizing: border-box;
 }
 #wall{

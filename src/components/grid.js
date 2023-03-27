@@ -12,6 +12,7 @@ export default class gridContainer extends Component {
       drawWalls: false,
       selectedSquares: [],
       newWall: [],
+      squares: [],
     };
   }
 
@@ -69,17 +70,33 @@ export default class gridContainer extends Component {
 
   updateGraph() {
     let moves = findPath(this.state.graph, this.state.selectedSquares);
+    let copyMoves = [];
     let newGraph = [];
+    let squares = document.getElementsByClassName("square");
+    for (let square of squares) {
+      moves.forEach((element) => {
+        if (square.getAttribute("value") == element) copyMoves.push(square);
+      });
+    }
+    console.log(copyMoves[0]);
+    while (copyMoves[0]) {
+      setTimeout(() => {
+        copyMoves[0].setAttribute("id", "selected");
+        
+      }, 1000);
+      copyMoves.shift();
+    }
     this.state.graph.forEach((sq) => {
       moves.forEach((move) => {
-        if (move === sq.value) {
+        if (move == sq.value) {
           sq.path = true;
         }
       });
+
       newGraph.push(sq);
-    });
-    this.setState({
-      graph: newGraph,
+      this.setState({
+        graph: newGraph,
+      });
     });
   }
 
@@ -127,10 +144,9 @@ export default class gridContainer extends Component {
     return { width: sides, height: sides };
   }
 
-  render() {
+  squaresRenderArray() {
     let squares = [];
     let style = this.getSquareSize();
-
     for (let i = 0; i < this.state.graph.length; i++) {
       squares.push(
         <Square
@@ -143,7 +159,11 @@ export default class gridContainer extends Component {
         />
       );
     }
-    return <div id="grid-container">{squares}</div>;
+    return squares;
+  }
+
+  render() {
+    return <div id="grid-container">{this.squaresRenderArray()}</div>;
   }
 }
 
@@ -196,6 +216,7 @@ export class Square extends Component {
             id="selected"
             style={this.props.style}
             onClick={this.selectSquare}
+            value={this.props.node.value}
           ></div>
         ) : (
           <div
@@ -204,6 +225,7 @@ export class Square extends Component {
             onMouseOver={this.addToWall}
             onClick={this.selectSquare}
             style={this.props.style}
+            value={this.props.node.value}
           ></div>
         )}
       </div>
